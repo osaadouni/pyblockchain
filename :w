@@ -37,24 +37,6 @@ def mine_from_prev_block(prev_block, rounds=STANDARD_ROUNDS, start_nonce=0):
     return mine_block(new_block, rounds=rounds, start_nonce=start_nonce)
 
 
-
-def mine_block(new_block, rounds=STANDARD_ROUNDS, start_nonce=0):
-    # Attempting to find a vlid nonce to match the required difficulty 
-    # of leading zeros. We're only going to try 1000
-    nonce_range = [i+start_once for i in range(rounds)]
-
-    for nonce in nonce_range:
-        new_block.nonce = nonce 
-        new_block.update_self_hash()
-        if str(new_block.hash[0:NUM_ZEROS]) == '0' * NUM_ZEROS:
-            print 'block %s mined. Nonce: %s' % (new_block.index, new_block.nonce)
-            assert new_block.is_valid()
-            return new_block, rounds, start_nonce
-    
-    # couldn't find a hash to work with, return rounds and start_nonce
-    # as well so we can know what we tried
-    return None, rounds, start_nonce
-
 def generate_header(index, prev_hash, data, timestamp, nonce):
     return str(index) + prev_hash + data + str(timestamp) + str(nonce)
 
